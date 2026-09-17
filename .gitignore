@@ -1,0 +1,85 @@
+# ============================================================
+# M快播 · Git 忽略规则
+# 原则：源码/配置/文档入库；依赖、构建产物、临时目录、安装包不入库
+# ============================================================
+
+# ---------- 依赖 ----------
+node_modules/
+
+# ---------- 构建产物 ----------
+dist/
+out/
+release/
+build/icon.ico
+build/icon.png
+
+# 构建被打断时留下的旧产物（safe-delete 拦截时的绕行残留）
+dist_old_*/
+dist_broken_*
+# 被 git gc 破坏后改名保留的残缺仓库备份
+.git_broken_*/
+
+# ---------- 临时 / 调试目录（历史遗留，非源码）----------
+.vite-*/
+.vite-apk/
+.capdl/
+.playtest/
+.workbuddy/
+
+# ---------- Android ----------
+# Gradle 缓存目录名不固定（实际存在 .gradle / .gradle_bak* / .gradle_home* 共 11 个），
+# 用通配覆盖。缓存内含超长路径，在 Windows 上会触发
+# "error: open(...): Filename too long" 使整个 git add 失败，必须排除。
+android/.gradle*/
+android/.tmp/
+# 任意层级的 Gradle 构建输出：app/build、capacitor/build 等；
+# 以及 build 被改名躲避 safe-delete 留下的 build_old*
+android/**/build/
+android/**/build_old*/
+android/local.properties
+android/.idea/
+android/captures/
+android/keystore.properties
+# Capacitor 由 `cap copy android` 生成的 Web 产物与配置（每次同步都会重建）
+android/app/src/main/assets/public/
+android/app/src/main/assets/public_old*/
+android/app/src/main/assets/capacitor.config.json
+android/app/src/main/assets/capacitor.plugins.json
+android/app/src/main/capacitor-cordova-android-plugins/
+# 构建过程遗留的调试输出（非源码）
+android/%SystemDrive%/
+android/attrib_result.txt
+android/icon_sync.txt
+android/java_procs.txt
+android/robocopy*.txt
+*.jks
+*.keystore
+
+# ---------- iOS（ios/.gitignore 已覆盖部分路径，此处补齐产物与签名）----------
+ios/App/build/
+ios/App/Pods/
+ios/App/output/
+ios/App/App/public/
+ios/App/App/capacitor.config.json
+ios/App/App/config.xml
+ios/DerivedData/
+ios/dist/
+ios/Payload/
+**/xcuserdata/
+*.xcuserstate
+
+# ---------- 安装包 ----------
+*.apk
+*.aab
+*.ipa
+
+# ---------- 测试 / 覆盖率产物 ----------
+coverage/
+play_test.png
+
+# ---------- 编辑器 / 系统 ----------
+.DS_Store
+Thumbs.db
+*.log
+.idea/
+.vscode/

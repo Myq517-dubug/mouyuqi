@@ -1,0 +1,11 @@
+[
+  { "id": "res-jszy", "name": "极速资源", "api": "https://jszyapi.com/api.php/provide/vod", "enabled": true },
+  { "id": "res-zuid", "name": "最大资源", "api": "https://api.zuidapi.com/api.php/provide/vod", "enabled": true },
+  { "id": "res-guangsu", "name": "光速资源", "api": "https://api.guangsuapi.com/api.php/provide/vod", "enabled": true },
+  { "id": "res-yhzy", "name": "樱花资源", "api": "https://m3u8.apiyhzy.com/api.php/provide/vod", "enabled": true },
+  { "id": "res-maoyan", "name": "猫眼资源", "api": "https://api.maoyanapi.top/api.php/provide/vod", "enabled": true },
+  { "id": "res-hongniu", "name": "红牛资源", "api": "https://www.hongniuzy2.com/api.php/provide/vod", "enabled": true },
+  { "id": "res-baofeng", "name": "暴风资源", "api": "https://bfzyapi.com/api.php/provide/vod", "enabled": true },
+  { "id": "res-wolong", "name": "卧龙资源", "api": "https://wolongzyw.com/api.php/provide/vod", "enabled": true },
+  { "id": "res-lzi", "name": "量子资源", "api": "https://cj.lziapi.com/api.php/provide/vod", "enabled": true }
+]

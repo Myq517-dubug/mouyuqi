@@ -1,0 +1,64 @@
+name: iOS Build (unsigned .ipa)
+
+# 云端 macOS 构建：Windows 无法编译 iOS，故借 GitHub Actions 的 macOS runner 出包。
+# 产出「未签名 .ipa」，下载后用 Sideloadly / AltStore 以免费 Apple ID 签名安装。
+#
+# 触发方式：
+#   1) 手动：Actions → 本 workflow → Run workflow
+#   2) 打 tag：git tag ios-v1.0.0 && git push origin ios-v1.0.0
+
+on:
+  workflow_dispatch:
+    inputs:
+      skip_pods:
+        description: '跳过 pod install（依赖未变时加速）'
+        type: boolean
+        required: false
+        default: false
+  push:
+    tags:
+      - 'ios-v*'
+
+permissions:
+  contents: read
+
+jobs:
+  build-ios:
+    # macos-14 = Apple Silicon runner，自带 Xcode 15+ 与 CocoaPods
+    runs-on: macos-14
+    timeout-minutes: 45
+
+    steps:
+      - name: 拉取代码
+        uses: actions/checkout@v4
+
+      - name: 安装 Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: 安装依赖（npm ci）
+        run: npm ci
+
+      - name: 确认构建环境
+        run: |
+          echo "--- xcodebuild ---"; xcodebuild -version
+          echo "--- cocoapods ---"; pod --version || echo "pod 未安装"
+          echo "--- node ---"; node -v
+
+      - name: 构建并打包 .ipa
+        run: |
+          if [ "${{ github.event.inputs.skip_pods }}" = "true" ]; then
+            bash scripts/build-ios.sh --no-pods
+          else
+            bash scripts/build-ios.sh
+          fi
+
+      - name: 上传 .ipa 产物
+        uses: actions/upload-artifact@v4
+        with:
+          name: M快播-ios-unsigned
+          path: ios/dist/*.ipa
+          if-no-files-found: error
+          retention-days: 30

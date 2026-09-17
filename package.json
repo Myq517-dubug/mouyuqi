@@ -1,0 +1,79 @@
+{
+  "name": "m-kuaibo",
+  "version": "1.0.0",
+  "description": "M快播 - 多源切换、搜索聚合、本地收藏与续播（Electron 桌面 / Android / iOS）",
+  "main": "out/electron/main.js",
+  "author": "Senior Developer",
+  "license": "MIT",
+  "scripts": {
+    "gen-icon": "node scripts/gen-icon.mjs",
+    "dev": "vite",
+    "compile": "tsc -p tsconfig.electron.json",
+    "build": "tsc -p tsconfig.electron.json && vite build",
+    "pack": "npm run gen-icon && npm run build && electron-builder --dir",
+    "dist": "npm run gen-icon && npm run build && electron-builder",
+    "android:init": "npx cap add android",
+    "android:sync": "npm run build && npx cap sync android",
+    "android:open": "npx cap open android",
+    "android:apk": "npm run android:sync && cd android && gradlew.bat assembleDebug",
+    "ios:init": "npx cap add ios",
+    "ios:sync": "npm run build && npx cap sync ios",
+    "ios:copy": "npm run build && npx cap copy ios",
+    "ios:open": "npx cap open ios",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "coverage": "vitest run --coverage"
+  },
+  "dependencies": {
+    "@capacitor/core": "^6.2.0",
+    "@capacitor/preferences": "^6.0.3",
+    "@capacitor/share": "^6.0.2",
+    "hls.js": "^1.5.13",
+    "https-proxy-agent": "^5.0.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "socks-proxy-agent": "^6.2.1"
+  },
+  "devDependencies": {
+    "@capacitor/android": "^6.2.0",
+    "@capacitor/cli": "^6.2.0",
+    "@capacitor/ios": "^6.2.2",
+    "@testing-library/jest-dom": "^6.5.0",
+    "@testing-library/react": "^16.0.0",
+    "@types/node": "^20.14.0",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "@vitest/coverage-v8": "^2.1.0",
+    "electron": "^31.3.0",
+    "electron-builder": "^24.13.3",
+    "jsdom": "^25.0.0",
+    "typescript": "^5.5.4",
+    "vite": "^5.4.0",
+    "vitest": "^2.1.0"
+  },
+  "build": {
+    "appId": "com.mkuaibo.app",
+    "productName": "M快播",
+    "copyright": "Copyright © 2026",
+    "files": [
+      "out/**/*",
+      "dist/**/*"
+    ],
+    "directories": {
+      "output": "release"
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "build/icon.ico",
+      "artifactName": "M快播-${version}-setup.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true
+    }
+  }
+}
