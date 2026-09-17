@@ -29,11 +29,15 @@ jobs:
     timeout-minutes: 45
 
     steps:
+      # 以下 action 必须用 v5+：其 action.yml 声明 actions 运行时为 node24。
+      # v4 系声明的是 node20，而 runner 镜像已于 2026-09-16 移除 Node 20 二进制，
+      # 继续用 v4 会从 warning 升级为硬失败（实测 #1 run 已报 Node 20 deprecated 警告）。
       - name: 拉取代码
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: 安装 Node 22
-        uses: actions/setup-node@v4
+        # 此处 node-version 是「项目自身命令使用的 Node」，与上面的 action 运行时无关，保持 22 以对齐本地环境
+        uses: actions/setup-node@v5
         with:
           node-version: '22'
           cache: 'npm'
@@ -56,7 +60,7 @@ jobs:
           fi
 
       - name: 上传 .ipa 产物
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: M快播-ios-unsigned
           path: ios/dist/*.ipa
